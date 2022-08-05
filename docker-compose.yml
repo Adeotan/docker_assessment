@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  php-apache-environment:
+    container_name: 'php-apache'
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    depends_on:
+        - db
+    volumes:
+      - ./php/app:/var/www/
+    ports:
+      - 80:80
+  db:
+    container_name: db
+    image: 'mariadb:10.2.8'
+    restart: always
+    environment:
+        MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+        MYSQL_DATABASE: MYSQL_DATABASE
+        MYSQL_USER: MYSQL_USER
+        MYSQL_PASSWORD: MYSQL_PASSWORD
+    volumes:
+      - ./datadir:/var/lib/mysql
+      - ./mysqlconfdir:/etc/mysql/conf.d
+    ports:
+        - 3306:3306
